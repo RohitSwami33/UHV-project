@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 const { upload } = require('./cloudinary');
 
@@ -10,6 +11,9 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // MongoDB Connection
 mongoose.connect(process.env.VITE_MONGODB_URI)
@@ -29,7 +33,7 @@ const scamReportSchema = new mongoose.Schema({
 
 const ScamReport = mongoose.model('ScamReport', scamReportSchema);
 
-// Routes
+// API Routes
 app.post('/api/reports', upload.single('screenshot'), async (req, res) => {
     try {
         const { name, email, scamType, description } = req.body;
@@ -100,6 +104,12 @@ app.post('/api/check-password', async (req, res) => {
         console.error('DeepSeek API Error:', error);
         res.status(500).json({ error: 'Error analyzing password strength' });
     }
+});
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 app.listen(PORT, () => {

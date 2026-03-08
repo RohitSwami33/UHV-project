@@ -24,7 +24,7 @@ export default function AdminDashboard({ onBack }: { onBack: () => void }) {
     const fetchReports = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/api/reports');
+            const response = await fetch('/api/reports');
             const data = await response.json();
             setReports(data);
         } catch (error) {

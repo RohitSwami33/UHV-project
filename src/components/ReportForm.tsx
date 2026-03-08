@@ -85,7 +85,7 @@ export default function ReportForm() {
         formDataToSend.append('screenshot', file);
       }
 
-      const response = await fetch('http://localhost:5000/api/reports', {
+      const response = await fetch('/api/reports', {
         method: 'POST',
         body: formDataToSend,
       });
