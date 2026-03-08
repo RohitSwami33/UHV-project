@@ -9,9 +9,19 @@ import EmergencyHelp from './components/EmergencyHelp';
 import PasswordChecker from './components/PasswordChecker';
 import ScamQuiz from './components/ScamQuiz';
 import Footer from './components/Footer';
+import AdminDashboard from './components/AdminDashboard';
+import { useState } from 'react';
 
 function App() {
+  const [isAdminView, setIsAdminView] = useState(false);
+
   const handleNavigate = (section: string) => {
+    if (section === 'admin') {
+      setIsAdminView(true);
+      return;
+    }
+
+    setIsAdminView(false);
     if (section === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
@@ -35,16 +45,22 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-900">
-      <Navigation onNavigate={handleNavigate} />
-      <Hero onReportClick={handleReportClick} />
-      <ScamTypes />
-      <SafetyTips />
-      <ScamAlerts />
-      <ReportForm />
-      <EmergencyHelp />
-      <PasswordChecker />
-      <ScamQuiz />
-      <Footer onNavigate={handleNavigate} />
+      {isAdminView ? (
+        <AdminDashboard onBack={() => setIsAdminView(false)} />
+      ) : (
+        <>
+          <Navigation onNavigate={handleNavigate} />
+          <Hero onReportClick={handleReportClick} />
+          <ScamTypes />
+          <SafetyTips />
+          <ScamAlerts />
+          <ReportForm />
+          <EmergencyHelp />
+          <PasswordChecker />
+          <ScamQuiz />
+          <Footer onNavigate={handleNavigate} />
+        </>
+      )}
     </div>
   );
 }

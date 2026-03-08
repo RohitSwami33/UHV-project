@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { Send, Upload, CheckCircle2 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { useState, useRef } from 'react';
+import { Send, Upload, CheckCircle2, FileText } from 'lucide-react';
 
 export default function ReportForm() {
   const [formData, setFormData] = useState({
@@ -12,6 +11,8 @@ export default function ReportForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const scamTypes = [
     'Phishing Emails',
@@ -53,6 +54,18 @@ export default function ReportForm() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        setErrors(prev => ({ ...prev, file: 'File size must be less than 5MB' }));
+        return;
+      }
+      setFile(selectedFile);
+      setErrors(prev => ({ ...prev, file: '' }));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -63,19 +76,27 @@ export default function ReportForm() {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from('scam_reports').insert([
-        {
-          name: formData.name,
-          email: formData.email,
-          scam_type: formData.scamType,
-          description: formData.description,
-        },
-      ]);
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('scamType', formData.scamType);
+      formDataToSend.append('description', formData.description);
+      if (file) {
+        formDataToSend.append('screenshot', file);
+      }
 
-      if (error) throw error;
+      const response = await fetch('http://localhost:5000/api/reports', {
+        method: 'POST',
+        body: formDataToSend,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit report');
+      }
 
       setIsSuccess(true);
       setFormData({ name: '', email: '', scamType: '', description: '' });
+      setFile(null);
 
       setTimeout(() => {
         setIsSuccess(false);
@@ -198,11 +219,32 @@ export default function ReportForm() {
             <label className="block text-white font-semibold mb-2">
               Upload Screenshot (Optional)
             </label>
-            <div className="border-2 border-dashed border-slate-600 rounded-lg p-8 text-center hover:border-cyan-500 transition-colors cursor-pointer">
-              <Upload className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-400">Click to upload or drag and drop</p>
-              <p className="text-gray-500 text-sm mt-1">PNG, JPG or PDF (Max 5MB)</p>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
+              accept=".jpg,.jpeg,.png,.pdf"
+            />
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="border-2 border-dashed border-slate-600 rounded-lg p-8 text-center hover:border-cyan-500 transition-colors cursor-pointer"
+            >
+              {file ? (
+                <div className="flex flex-col items-center">
+                  <FileText className="h-12 w-12 text-cyan-400 mb-2" />
+                  <p className="text-cyan-400 font-medium">{file.name}</p>
+                  <p className="text-gray-500 text-sm mt-1">Click to change file</p>
+                </div>
+              ) : (
+                <>
+                  <Upload className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+                  <p className="text-gray-400">Click to upload or drag and drop</p>
+                  <p className="text-gray-500 text-sm mt-1">PNG, JPG or PDF (Max 5MB)</p>
+                </>
+              )}
             </div>
+            {errors.file && <p className="text-red-400 text-sm mt-1">{errors.file}</p>}
           </div>
 
           {errors.submit && (

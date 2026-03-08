@@ -150,6 +150,12 @@ export default function Footer({ onNavigate }: FooterProps) {
               <a href="#" className="hover:text-cyan-400 transition-colors">
                 Disclaimer
               </a>
+              <button
+                onClick={() => onNavigate('admin')}
+                className="hover:text-cyan-400 transition-colors text-slate-700"
+              >
+                Admin
+              </button>
             </div>
           </div>
         </div>
