@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Shield, ExternalLink, Clock, User, Mail, AlertCircle, FileText, ArrowLeft, Download } from 'lucide-react';
 
 interface Report {
@@ -195,8 +195,8 @@ Generated via ScamShield Portal
                                     key={report._id}
                                     onClick={() => setSelectedReport(report)}
                                     className={`p-5 rounded-xl border-2 cursor-pointer transition-all duration-200 ${selectedReport?._id === report._id
-                                            ? 'bg-cyan-500/10 border-cyan-500 shadow-lg shadow-cyan-500/20'
-                                            : 'bg-slate-800 border-slate-700 hover:border-slate-600'
+                                        ? 'bg-cyan-500/10 border-cyan-500 shadow-lg shadow-cyan-500/20'
+                                        : 'bg-slate-800 border-slate-700 hover:border-slate-600'
                                         }`}
                                 >
                                     <div className="flex justify-between items-start mb-2">
