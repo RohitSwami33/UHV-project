@@ -1,4 +1,4 @@
-import { Shield, Phone, Mail, Globe, Github, Twitter, Facebook } from 'lucide-react';
+import { Shield, Phone, Mail, Globe, Twitter, Facebook, Github } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (section: string) => void;
@@ -72,22 +72,6 @@ export default function Footer({ onNavigate }: FooterProps) {
             <h3 className="text-white font-bold mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <button
-                  onClick={() => onNavigate('report')}
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  Report Fraud
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('emergency')}
-                  className="hover:text-cyan-400 transition-colors"
-                >
-                  Emergency Help
-                </button>
-              </li>
-              <li>
                 <a
                   href="https://cybercrime.gov.in"
                   target="_blank"
@@ -95,6 +79,16 @@ export default function Footer({ onNavigate }: FooterProps) {
                   className="hover:text-cyan-400 transition-colors"
                 >
                   National Cyber Crime Portal
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.ftc.gov/scam-alerts"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-cyan-400 transition-colors"
+                >
+                  FTC Scam Alerts
                 </a>
               </li>
             </ul>
@@ -125,10 +119,10 @@ export default function Footer({ onNavigate }: FooterProps) {
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-cyan-400" />
                 <a
-                  href="mailto:support@scamshield.gov.in"
+                  href="mailto:contact@scamshield.com"
                   className="text-white font-semibold hover:text-cyan-400 transition-colors"
                 >
-                  support@scamshield.gov.in
+                  contact@scamshield.com
                 </a>
               </li>
             </ul>
@@ -150,12 +144,6 @@ export default function Footer({ onNavigate }: FooterProps) {
               <a href="#" className="hover:text-cyan-400 transition-colors">
                 Disclaimer
               </a>
-              <button
-                onClick={() => onNavigate('admin')}
-                className="hover:text-cyan-400 transition-colors text-slate-700"
-              >
-                Admin
-              </button>
             </div>
           </div>
         </div>

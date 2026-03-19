@@ -13,7 +13,6 @@ export default function Navigation({ onNavigate }: NavigationProps) {
     { id: 'scam-types', label: 'Types of Scams' },
     { id: 'safety-tips', label: 'Safety Tips' },
     { id: 'scam-alerts', label: 'Scam Alerts' },
-    { id: 'report', label: 'Report Fraud' },
     { id: 'emergency', label: 'Emergency Help' },
   ];
 
