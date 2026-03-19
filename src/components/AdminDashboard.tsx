@@ -24,7 +24,8 @@ export default function AdminDashboard({ onBack }: { onBack: () => void }) {
     const fetchReports = async () => {
         setLoading(true);
         try {
-            const response = await fetch('/api/reports');
+            const API_BASE = import.meta.env.VITE_API_URL || '';
+            const response = await fetch(`${API_BASE}/api/reports`);
             const data = await response.json();
             setReports(data);
         } catch (error) {

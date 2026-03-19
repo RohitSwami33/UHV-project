@@ -85,7 +85,8 @@ export default function ReportForm() {
         formDataToSend.append('screenshot', file);
       }
 
-      const response = await fetch('/api/reports', {
+      const API_BASE = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${API_BASE}/api/reports`, {
         method: 'POST',
         body: formDataToSend,
       });
